@@ -1036,7 +1036,8 @@ body {
         border: none;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         text-align: center;
-        font-size: var(--font-size-lg);
+        font-size: var(--font-size-base);
+        font-weight: 400;
         letter-spacing: 1px;
         color: var(--color-text-secondary);
     }
@@ -1071,7 +1072,7 @@ body {
     .nav-link.active {
         background: transparent;
         color: var(--color-accent-primary);
-        font-weight: 700;
+        font-weight: 500;
         letter-spacing: 1.5px;
     }
     
