@@ -21,6 +21,7 @@ class HorizontalPageScroller {
         this.setupNavigation();
         this.setupScrollHijack();
         this.setupButtons();
+        this.setupHeroCtas();
         this.setupFormHandler();
         this.setupProfileImage();
         this.setupMobileScrollObserver();
@@ -76,42 +77,69 @@ class HorizontalPageScroller {
         }
     }
 
+    setupHeroCtas() {
+        // In-page navigation buttons (e.g. "View Projects")
+        document.querySelectorAll('[data-goto]').forEach((el) => {
+            el.addEventListener('click', (e) => {
+                e.preventDefault();
+                const idx = parseInt(el.getAttribute('data-goto'), 10);
+                if (window.innerWidth <= 768) {
+                    this.sections[idx]?.scrollIntoView({ behavior: 'smooth' });
+                } else {
+                    this.goToPage(idx);
+                }
+            });
+        });
+
+        // CV download — intercept and check the file exists, fall back gracefully if not
+        const cvBtn = document.querySelector('[data-cv]');
+        if (cvBtn) {
+            cvBtn.addEventListener('click', async (e) => {
+                e.preventDefault();
+                const href = cvBtn.getAttribute('href');
+                try {
+                    const res = await fetch(href, { method: 'HEAD' });
+                    if (!res.ok) throw new Error('missing');
+                    const a = document.createElement('a');
+                    a.href = href;
+                    a.download = '';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                } catch (err) {
+                    this.showToast('CV is being finalised — please use the contact form for now.', 'warning', 7000);
+                }
+            });
+        }
+    }
+
     setupScrollHijack() {
-        this.lastWheelTime = Date.now();
+        // Desktop wheel / trackpad paging.
+        // One page per scroll: trigger immediately, then lock for the length of the
+        // slide (fixed, NOT reset by further events) so the next scroll advances as
+        // soon as the animation finishes — no need to pause between pages. Trackpad
+        // momentum during the lock is ignored, and content taller than the viewport
+        // never blocks paging.
+        this.wheelLocked = false;
 
-        // Mousewheel
         document.addEventListener('wheel', (e) => {
-            // If we are on mobile view (vertical scroll fallback), don't hijack
-            if (window.innerWidth <= 768) return;
-            
-            // Allow internal vertical scrolling if target element is scrollable
-            const target = e.target.closest('.section');
-            if (target) {
-                const canScrollUp = target.scrollTop > 0;
-                const canScrollDown = Math.ceil(target.scrollTop + target.clientHeight) < target.scrollHeight;
-                
-                if (e.deltaY < 0 && canScrollUp) return;
-                if (e.deltaY > 0 && canScrollDown) return;
-            }
-
+            if (window.innerWidth <= 768) return; // mobile uses native vertical scroll
             e.preventDefault();
+            if (this.isAnimating || this.wheelLocked) return;
 
-            const now = Date.now();
-            const timeSinceLastEvent = now - this.lastWheelTime;
-            this.lastWheelTime = now; // Always update on every single wheel event
-            
-            // If events are firing rapidly (less than 150ms apart), they are part of the same continuous 
-            // trackpad swipe or mouse wheel free-spin momentum. We ONLY want to trigger on the FIRST event 
-            // of a new scroll action (when timeSinceLastEvent > 150) or if we are currently animating.
-            if (this.isAnimating || timeSinceLastEvent < 150) {
-                return;
-            }
+            // Use whichever axis the user scrolls (horizontal trackpad swipes page
+            // too) and normalise line/page deltas across browsers.
+            let delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+            if (e.deltaMode === 1) delta *= 16;
+            else if (e.deltaMode === 2) delta *= window.innerHeight;
 
-            if (e.deltaY > 0) {
-                this.nextPage();
-            } else if (e.deltaY < 0) {
-                this.prevPage();
-            }
+            if (Math.abs(delta) < 12) return; // ignore tiny jitter
+
+            this.wheelLocked = true;
+            setTimeout(() => { this.wheelLocked = false; }, 560);
+
+            if (delta > 0) this.nextPage();
+            else this.prevPage();
         }, { passive: false });
 
         // Touch support for swipe
@@ -310,9 +338,13 @@ class HorizontalPageScroller {
         if (forceClose || navMenu.classList.contains('active')) {
             navMenu.classList.remove('active');
             menuToggle.textContent = '☰';
+            menuToggle.setAttribute('aria-expanded', 'false');
+            menuToggle.setAttribute('aria-label', 'Open menu');
         } else {
             navMenu.classList.add('active');
             menuToggle.textContent = '✕';
+            menuToggle.setAttribute('aria-expanded', 'true');
+            menuToggle.setAttribute('aria-label', 'Close menu');
         }
     }
 
@@ -327,6 +359,7 @@ class HorizontalPageScroller {
 
         const toast = document.createElement('div');
         toast.className = `toast-card ${type}`;
+        toast.setAttribute('role', type === 'error' ? 'alert' : 'status');
         
         let icon = '';
         if (type === 'success') {
@@ -341,7 +374,7 @@ class HorizontalPageScroller {
 
         toast.innerHTML = `
             <div class="toast-content">
-                <span class="toast-icon">${icon}</span>
+                <span class="toast-icon" aria-hidden="true">${icon}</span>
                 <span class="toast-message">${message}</span>
             </div>
             <button class="toast-close" aria-label="Close">
@@ -405,6 +438,40 @@ class HorizontalPageScroller {
 }
 
 // ========================================
+// HERO ROLE TYPEWRITER
+// ========================================
+class TypeWriter {
+    constructor(el, words, opts = {}) {
+        this.el = el;
+        this.words = words;
+        this.typeSpeed = opts.typeSpeed || 85;
+        this.deleteSpeed = opts.deleteSpeed || 40;
+        this.holdTime = opts.holdTime || 1700;
+        this.wordIndex = 0;
+        this.charIndex = 0;
+        this.deleting = false;
+        this.tick();
+    }
+
+    tick() {
+        const word = this.words[this.wordIndex % this.words.length];
+        this.charIndex += this.deleting ? -1 : 1;
+        this.el.textContent = word.substring(0, this.charIndex);
+
+        let delay = this.deleting ? this.deleteSpeed : this.typeSpeed;
+        if (!this.deleting && this.charIndex === word.length) {
+            delay = this.holdTime;
+            this.deleting = true;
+        } else if (this.deleting && this.charIndex === 0) {
+            this.deleting = false;
+            this.wordIndex++;
+            delay = 400;
+        }
+        setTimeout(() => this.tick(), delay);
+    }
+}
+
+// ========================================
 // INTERACTIVE ELEMENTS
 // ========================================
 class InteractiveEffects {
@@ -418,7 +485,7 @@ class InteractiveEffects {
 
     setupCardAnimations() {
         // Add ripple effect on card clicks
-        const cards = document.querySelectorAll('.link-card, .service-card.tile, .project-tile');
+        const cards = document.querySelectorAll('.service-card.tile, .project-tile');
         cards.forEach(card => {
             card.addEventListener('click', function (e) {
                 const ripple = document.createElement('span');
@@ -451,25 +518,7 @@ class PerformanceOptimizer {
     }
 
     init() {
-        this.lazyLoadImages();
         this.optimizeAnimations();
-        // this.setupScrollIndicator(); // Disabled for horizontal scroll
-    }
-
-    lazyLoadImages() {
-        const images = document.querySelectorAll('img[data-src]');
-        const imageObserver = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.src = img.dataset.src;
-                    img.removeAttribute('data-src');
-                    imageObserver.unobserve(img);
-                }
-            });
-        });
-
-        images.forEach(img => imageObserver.observe(img));
     }
 
     optimizeAnimations() {
@@ -481,22 +530,6 @@ class PerformanceOptimizer {
             document.documentElement.style.setProperty('--transition-base', '0s');
             document.documentElement.style.setProperty('--transition-slow', '0s');
             document.documentElement.style.scrollBehavior = 'auto';
-        }
-    }
-
-    setupScrollIndicator() {
-        const scrollIndicator = document.querySelector('.scroll-indicator');
-        if (scrollIndicator) {
-            window.addEventListener('scroll', () => {
-                const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
-
-                // Hide indicator when scrolled past 20%
-                if (scrollPercentage > 20) {
-                    scrollIndicator.style.opacity = '0.3';
-                } else {
-                    scrollIndicator.style.opacity = '1';
-                }
-            });
         }
     }
 }
@@ -549,13 +582,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const optimizer = new PerformanceOptimizer();
     const keyboard = new KeyboardNavigation(navigator);
 
+    // Hero role typewriter (respects reduced-motion)
+    const roleEl = document.getElementById('heroRole');
+    if (roleEl) {
+        const roles = ['Backend Developer', 'Automation Engineer', 'Django & REST APIs', 'Selenium & Web Scraping'];
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            roleEl.textContent = roles[0];
+        } else {
+            new TypeWriter(roleEl, roles);
+        }
+    }
+
+    // Dynamic copyright year
+    const yearEl = document.getElementById('year');
+    if (yearEl) yearEl.textContent = new Date().getFullYear();
+
     // Add ripple styles dynamically
     const style = document.createElement('style');
     style.textContent = `
         .ripple {
             position: absolute;
             border-radius: 50%;
-            background: rgba(212, 175, 55, 0.3);
+            background: rgba(45, 212, 191, 0.3);
             transform: scale(0);
             animation: ripple-animation 0.6s ease-out;
             pointer-events: none;
@@ -571,7 +619,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.head.appendChild(style);
 
     // Console welcome message
-    console.log('%c👋 Welcome to Faizan Ali\'s Portfolio', 'font-size: 20px; color: #d4af37; font-weight: bold;');
+    console.log('%c👋 Welcome to Faizan Ali\'s Portfolio', 'font-size: 20px; color: #2dd4bf; font-weight: bold;');
     console.log('%cKeyboard shortcuts:', 'font-size: 14px; color: #b8b8b8;');
     console.log('  1-5: Jump to sections\n  Esc: Return to home\n  Arrows (↑ / ↓ / ← / →): Navigate sections');
 });

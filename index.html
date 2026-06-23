@@ -4,22 +4,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Faizan Ali - Backend Developer specializing in Python, Django, and REST APIs">
-    <meta name="keywords" content="Backend Developer, Python, Django, REST API, Web Development">
+    <meta name="description" content="Faizan Ali — Backend & Automation Developer building scalable systems and intelligent automation with Python, Django, REST APIs, and Selenium.">
+    <meta name="keywords" content="Backend Developer, Automation, Python, Django, REST API, Selenium, Web Scraping, Web Development">
     <meta name="author" content="Faizan Ali">
-    <title>Faizan Ali - Backend Developer</title>
+    <title>Faizan Ali — Backend & Automation Developer</title>
+
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <meta name="theme-color" content="#0d1117">
+
+    <!-- Open Graph / social sharing (update the URL if you use a custom domain) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Faizan Ali — Backend & Automation Developer">
+    <meta property="og:description" content="Building scalable backend systems and intelligent automation with Python, Django, REST APIs, and Selenium.">
+    <meta property="og:url" content="https://faizan-ali-dev.github.io/My-Portfolio/">
+    <meta property="og:image" content="https://faizan-ali-dev.github.io/My-Portfolio/faizan_ali_dev.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Faizan Ali — Backend & Automation Developer">
+    <meta name="twitter:description" content="Building scalable backend systems and intelligent automation with Python, Django, and Selenium.">
+    <meta name="twitter:image" content="https://faizan-ali-dev.github.io/My-Portfolio/faizan_ali_dev.jpg">
+
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <noscript>
+        <style>
+            html, body { overflow: auto !important; height: auto !important; }
+            .content-strip { display: block !important; width: 100% !important; transform: none !important; }
+            .section { width: 100% !important; height: auto !important; min-height: 100vh; opacity: 1 !important; animation: none !important; }
+            .aos { opacity: 1 !important; transform: none !important; }
+            .nav-arrow, .page-dots { display: none !important; }
+        </style>
+    </noscript>
 </head>
 
 <body>
+    <a href="#home" class="skip-link">Skip to content</a>
+
     <!-- Navigation -->
-    <nav class="navbar">
+    <nav class="navbar" aria-label="Primary">
         <div class="nav-container">
             <a href="#home" class="logo">Faizan.</a>
-            <ul class="nav-menu">
+            <ul class="nav-menu" id="navMenu">
                 <li><a href="#home" class="nav-link active">Home</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
                 <li><a href="#services" class="nav-link">Services</a></li>
@@ -27,7 +54,7 @@
                 <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
             <div class="nav-icons">
-                <button class="icon-btn" id="menuToggle" title="Menu">☰</button>
+                <button class="icon-btn" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navMenu" title="Menu">☰</button>
             </div>
         </div>
     </nav>
@@ -44,9 +71,10 @@
             <!-- HOME SECTION -->
             <section class="section active" id="home">
                 <div class="hero-section">
-                    <!-- <div class="hero-label">HELLO THERE!</div> -->
+                    <span class="section-tag aos" style="transition-delay: 0.05s;">whoami</span>
                     <h1 class="hero-name aos" style="transition-delay: 0.1s;">Faizan Ali</h1>
-                    <p class="hero-role aos" style="transition-delay: 0.2s;">Backend & Automation Developer</p>
+                    <p class="hero-role aos" style="transition-delay: 0.2s;" id="heroRole" aria-hidden="true">Backend &amp; Automation Developer</p>
+                    <span class="sr-only">Backend and Automation Developer</span>
                     <div class="hero-divider aos" style="transition-delay: 0.3s;"></div>
                     <p class="hero-description aos" style="transition-delay: 0.4s;">
                         I specialize in building scalable backend systems and intelligent automation
@@ -56,6 +84,10 @@
                         From designing RESTful APIs to engineering complex browser automation workflows,
                         I help businesses create reliable, efficient, and automated web solutions.
                     </p>
+                    <div class="hero-cta aos" style="transition-delay: 0.6s;">
+                        <a href="#projects" class="btn-primary hero-btn" data-goto="3">View Projects</a>
+                        <a href="Faizan_Ali_CV.pdf" class="btn-ghost hero-btn" data-cv download>Download CV</a>
+                    </div>
                 </div>
             </section>
 
@@ -63,8 +95,9 @@
             <section class="section" id="about">
                 <div class="about-vertical">
                     <div class="profile-image-circle aos" style="transition-delay: 0.1s;">
-                        <img src="faizan_ali_dev.png" alt="Faizan Ali" id="profileImg">
+                        <img src="faizan_ali_dev.jpg" alt="Faizan Ali — Backend &amp; Automation Developer" id="profileImg" width="600" height="592" loading="lazy">
                     </div>
+                    <span class="section-num aos" style="transition-delay: 0.15s;">02 — About</span>
                     <h1 class="page-title about-title aos" style="transition-delay: 0.2s;">About</h1>
                     <div class="bio-section-vertical">
                         <p class="bio-text aos" style="transition-delay: 0.3s;">
@@ -80,6 +113,7 @@
 
             <!-- SERVICES SECTION -->
             <section class="section" id="services">
+                <span class="section-num aos" style="transition-delay: 0.05s;">03 — Services</span>
                 <h1 class="page-title aos" style="transition-delay: 0.1s;">Services</h1>
                 <p class="section-tagline aos" style="transition-delay: 0.2s;">
                     Crafting scalable backends, seamless APIs, and intelligent automation.<br>
@@ -89,7 +123,7 @@
 
                 <div class="services-grid aos" style="transition-delay: 0.3s;">
                     <div class="service-card tile">
-                        <svg class="tile-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="tile-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
                             <line x1="8" y1="21" x2="16" y2="21"></line>
                             <line x1="12" y1="17" x2="12" y2="21"></line>
@@ -98,7 +132,7 @@
                     </div>
 
                     <div class="service-card tile">
-                        <svg class="tile-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="tile-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <polyline points="16 18 22 12 16 6"></polyline>
                             <polyline points="8 6 2 12 8 18"></polyline>
                             <line x1="14" y1="4" x2="10" y2="20"></line>
@@ -107,7 +141,7 @@
                     </div>
 
                     <div class="service-card tile">
-                        <svg class="tile-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="tile-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
                             <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path>
                             <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path>
@@ -117,7 +151,7 @@
                     </div>
 
                     <div class="service-card tile">
-                        <svg class="tile-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="tile-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
                             <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
                         </svg>
@@ -125,7 +159,7 @@
                     </div>
 
                     <div class="service-card tile">
-                        <svg class="tile-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="tile-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
                             <path d="M2 17l10 5 10-5"></path>
                             <path d="M2 12l10 5 10-5"></path>
@@ -134,7 +168,7 @@
                     </div>
 
                     <div class="service-card tile">
-                        <svg class="tile-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="tile-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="12" cy="12" r="10"></circle>
                             <circle cx="12" cy="12" r="4"></circle>
                             <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line>
@@ -147,14 +181,14 @@
                     </div>
 
                     <div class="service-card tile">
-                        <svg class="tile-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="tile-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M2 12h4l2-9 4 18 2-9h4"></path>
                         </svg>
                         <span class="tile-label">Performance Tuning</span>
                     </div>
 
                     <div class="service-card tile">
-                        <svg class="tile-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <svg class="tile-icon" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
                             <polyline points="15 3 21 3 21 9"></polyline>
                             <line x1="10" y1="14" x2="21" y2="3"></line>
@@ -166,80 +200,109 @@
 
             <!-- PROJECTS SECTION -->
             <section class="section" id="projects">
+                <span class="section-num aos" style="transition-delay: 0.05s;">04 — Projects</span>
                 <h1 class="page-title aos" style="transition-delay: 0.1s;">Projects</h1>
                 <p class="section-tagline aos" style="transition-delay: 0.2s;">
-                    Real-world solutions I've built — from API platforms to automation tools.<br>
-                    Each project reflects my focus on clean architecture and reliable performance.
+                    Real-world systems I've built — from automation pipelines to full Django platforms.
                 </p>
 
-                <div class="projects-tiles aos" style="transition-delay: 0.3s;">
-                    <div class="project-tile">
-                        <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
-                            <line x1="4" y1="22" x2="4" y2="15"></line>
-                        </svg>
-                        <span class="tile-label">API Management</span>
-                        <a href="https://github.com/faizan-ali-dev" target="_blank" class="tile-view-btn">View</a>
+                <div class="project-cards aos" style="transition-delay: 0.3s;">
+                    <div class="project-card">
+                        <div class="project-card-head">
+                            <svg class="project-card-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16.5 9.4 7.5 4.21"></path>
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                            </svg>
+                            <span class="project-card-title">Amazon Canada Data Pipeline</span>
+                            <span class="project-card-year">2026</span>
+                        </div>
+                        <p class="project-card-desc">Automated Amazon CA/US product scraping by UPC code, with anti-bot handling, CAPTCHA detection, and checkpoint recovery.</p>
+                        <div class="project-card-tags">
+                            <span class="project-tag">Python</span>
+                            <span class="project-tag">Selenium</span>
+                            <span class="project-tag">undetected-chromedriver</span>
+                            <span class="project-tag">openpyxl</span>
+                        </div>
+                        <a href="https://github.com/faizan-ali-dev" target="_blank" rel="noopener" class="project-card-link">GitHub
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                        </a>
                     </div>
 
-                    <div class="project-tile">
-                        <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                        </svg>
-                        <span class="tile-label">Auth Service</span>
-                        <a href="https://github.com/faizan-ali-dev" target="_blank" class="tile-view-btn">View</a>
+                    <div class="project-card">
+                        <div class="project-card-head">
+                            <svg class="project-card-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                            </svg>
+                            <span class="project-card-title">Afaa Elevate — Digital Academy</span>
+                            <span class="project-card-year">2025</span>
+                        </div>
+                        <p class="project-card-desc">Digital academy with course management, authentication, and a referral system — deployed live on Django + PostgreSQL.</p>
+                        <div class="project-card-tags">
+                            <span class="project-tag">Django</span>
+                            <span class="project-tag">PostgreSQL</span>
+                            <span class="project-tag">Referral System</span>
+                        </div>
+                        <a href="https://afaaelevate.com" target="_blank" rel="noopener" class="project-card-link">Live Site
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                        </a>
                     </div>
 
-                    <div class="project-tile">
-                        <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                        </svg>
-                        <span class="tile-label">Data Pipeline</span>
-                        <a href="https://github.com/faizan-ali-dev" target="_blank" class="tile-view-btn">View</a>
+                    <div class="project-card">
+                        <div class="project-card-head">
+                            <svg class="project-card-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                                <circle cx="12" cy="13" r="4"></circle>
+                            </svg>
+                            <span class="project-card-title">Facial Check-In &amp; Attendance</span>
+                            <span class="project-card-year">2025</span>
+                        </div>
+                        <p class="project-card-desc">Facial-recognition check-in kiosk with real-time verification, attendance logs, and office-hours reporting via Django admin.</p>
+                        <div class="project-card-tags">
+                            <span class="project-tag">Django</span>
+                            <span class="project-tag">OpenCV</span>
+                            <span class="project-tag">face_recognition</span>
+                            <span class="project-tag">SQLite</span>
+                        </div>
+                        <a href="https://github.com/faizan-ali-dev" target="_blank" rel="noopener" class="project-card-link">GitHub
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                        </a>
                     </div>
 
-                    <div class="project-tile">
-                        <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
-                            <line x1="8" y1="21" x2="16" y2="21"></line>
-                            <line x1="12" y1="17" x2="12" y2="21"></line>
-                        </svg>
-                        <span class="tile-label">Admin Dashboard</span>
-                        <a href="https://github.com/faizan-ali-dev" target="_blank" class="tile-view-btn">View</a>
-                    </div>
-
-                    <div class="project-tile">
-                        <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="9" cy="21" r="1"></circle>
-                            <circle cx="20" cy="21" r="1"></circle>
-                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                        </svg>
-                        <span class="tile-label">E-Commerce</span>
-                        <a href="https://github.com/faizan-ali-dev" target="_blank" class="tile-view-btn">View</a>
-                    </div>
-
-                    <div class="project-tile">
-                        <svg class="tile-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-                            <polyline points="14 2 14 8 20 8"></polyline>
-                            <line x1="16" y1="13" x2="8" y2="13"></line>
-                            <line x1="16" y1="17" x2="8" y2="17"></line>
-                        </svg>
-                        <span class="tile-label">CMS</span>
-                        <a href="https://github.com/faizan-ali-dev" target="_blank" class="tile-view-btn">View</a>
+                    <div class="project-card">
+                        <div class="project-card-head">
+                            <svg class="project-card-icon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 11 12 14 22 4"></polyline>
+                                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+                            </svg>
+                            <span class="project-card-title">Task Management Web App</span>
+                            <span class="project-card-year">2024</span>
+                        </div>
+                        <p class="project-card-desc">Responsive task manager with real-time updates, email notifications, and team collaboration features.</p>
+                        <div class="project-card-tags">
+                            <span class="project-tag">Django</span>
+                            <span class="project-tag">JavaScript</span>
+                            <span class="project-tag">Bootstrap</span>
+                            <span class="project-tag">SQLite</span>
+                        </div>
+                        <a href="https://github.com/faizan-ali-dev" target="_blank" rel="noopener" class="project-card-link">GitHub
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                        </a>
                     </div>
                 </div>
             </section>
 
             <!-- CONTACT SECTION -->
             <section class="section" id="contact">
+                <span class="section-num aos" style="transition-delay: 0.05s;">05 — Contact</span>
                 <h1 class="page-title aos" style="transition-delay: 0.1s;">Contact</h1>
                 <p class="section-tagline aos" style="transition-delay: 0.15s;">
                     Ready to build something amazing? Let's connect and discuss your next project.
                 </p>
                 <div class="contact-content aos" style="transition-delay: 0.25s;">
-                    <form class="contact-form">
+                    <form class="contact-form" aria-label="Contact form">
                         <!-- Web3Forms Access Key - Get a free key from https://web3forms.com -->
                         <input type="hidden" name="access_key" value="1a82451f-c194-4b02-8b97-e4d416fffe4f">
                         
@@ -247,12 +310,15 @@
                         <input type="checkbox" name="botcheck" class="hidden" style="display: none;">
 
                         <div class="form-group">
+                            <label for="name" class="sr-only">Name</label>
                             <input type="text" id="name" name="name" placeholder="Name" required>
                         </div>
                         <div class="form-group">
+                            <label for="email" class="sr-only">Email</label>
                             <input type="email" id="email" name="email" placeholder="Email" required>
                         </div>
                         <div class="form-group">
+                            <label for="message" class="sr-only">Message</label>
                             <textarea id="message" name="message" rows="8" placeholder="Message" required></textarea>
                         </div>
                         <button type="submit" class="btn-primary btn-submit">Send Message</button>
@@ -266,37 +332,37 @@
             <div class="social-sidebar">
                 <a href="https://www.linkedin.com/in/faizan-ali-b5a3a7291/" target="_blank" class="social-sidebar-icon"
                     title="LinkedIn">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="20" height="20" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
                         <rect x="2" y="9" width="4" height="12"></rect>
                         <circle cx="4" cy="4" r="2"></circle>
                     </svg>
                 </a>
                 <a href="https://github.com/faizan-ali-dev" target="_blank" class="social-sidebar-icon" title="GitHub">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="20" height="20" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path
                             d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22">
                         </path>
                     </svg>
                 </a>
                 <a href="mailto:faizancode68@gmail.com" class="social-sidebar-icon" title="Email">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="20" height="20" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                         <polyline points="22,6 12,13 2,6"></polyline>
                     </svg>
                 </a>
             </div>
-            <div class="copyright">© 2025 Faizan Ali</div>
+            <div class="copyright">© <span id="year">2025</span> Faizan Ali</div>
         </aside>
 
         <!-- Navigation Controls -->
-        <button class="nav-arrow prev-arrow hidden" id="prevPageBtn" title="Previous Page">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <button class="nav-arrow prev-arrow hidden" id="prevPageBtn" aria-label="Previous section" title="Previous Page">
+            <svg width="24" height="24" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="15 18 9 12 15 6"></polyline>
             </svg>
         </button>
-        <button class="nav-arrow next-arrow" id="nextPageBtn" title="Next Page">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <button class="nav-arrow next-arrow" id="nextPageBtn" aria-label="Next section" title="Next Page">
+            <svg width="24" height="24" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="9 18 15 12 9 6"></polyline>
             </svg>
         </button>
