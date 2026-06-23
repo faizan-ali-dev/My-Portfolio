@@ -46,10 +46,7 @@ class HorizontalPageScroller {
                 }
                 
                 // Close mobile menu
-                const navMenu = document.querySelector('.nav-menu');
-                if (navMenu && navMenu.classList.contains('active')) {
-                    navMenu.classList.remove('active');
-                }
+                this.toggleMobileMenu(true);
             });
         });
 
@@ -72,10 +69,9 @@ class HorizontalPageScroller {
 
         // Mobile menu toggle
         const menuToggle = document.getElementById('menuToggle');
-        const navMenu = document.querySelector('.nav-menu');
-        if (menuToggle && navMenu) {
+        if (menuToggle) {
             menuToggle.addEventListener('click', () => {
-                navMenu.classList.toggle('active');
+                this.toggleMobileMenu();
             });
         }
     }
@@ -237,9 +233,139 @@ class HorizontalPageScroller {
     }
 
     handleFormSubmit(form) {
-        const name = document.getElementById('name').value;
-        alert(`Thank you, ${name}! Your message has been received.`);
-        form.reset();
+        const submitBtn = form.querySelector('.btn-submit');
+
+        // Form inputs validation check
+        const name = document.getElementById('name').value.trim();
+        const email = document.getElementById('email').value.trim();
+        const message = document.getElementById('message').value.trim();
+
+        if (!name || !email || !message) {
+            this.showToast('Please fill in all fields before sending.', 'warning');
+            return;
+        }
+
+        // Web3Forms Access Key check
+        const accessKeyInput = form.querySelector('input[name="access_key"]');
+        if (accessKeyInput && accessKeyInput.value === 'YOUR_ACCESS_KEY_HERE') {
+            this.showToast('Configuration Required: Please insert your Web3Forms Access Key in index.html.', 'error', 10000);
+            return;
+        }
+
+        // Lock form & show loading state on button and loading toast
+        submitBtn.disabled = true;
+        submitBtn.classList.add('loading-btn');
+
+        const loadingToast = this.showToast('Sending message... please wait.', 'loading', 0);
+
+        // Collect all form data (includes access_key and botcheck honeypot)
+        const formData = new FormData(form);
+        const object = Object.fromEntries(formData);
+        const json = JSON.stringify(object);
+
+        // Submit to Web3Forms API
+        fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json'
+            },
+            body: json
+        })
+        .then(async (response) => {
+            let resJson = await response.json();
+            // Dismiss loading toast immediately
+            if (loadingToast) loadingToast.remove();
+
+            if (response.status === 200) {
+                // Success state
+                this.showToast('Message sent successfully! I will get back to you shortly.', 'success');
+                form.reset();
+            } else {
+                // Server-side validation or key error
+                console.error('Web3Forms Error Response:', resJson);
+                this.showToast(`Submission failed: ${resJson.message || 'Verification error'}.`, 'error');
+            }
+        })
+        .catch(error => {
+            // Dismiss loading toast immediately
+            if (loadingToast) loadingToast.remove();
+
+            // Network/CORS error
+            console.error('Network Error:', error);
+            this.showToast('Submission failed. Please try again or email directly at faizancode68@gmail.com.', 'error', 8000);
+        })
+        .finally(() => {
+            // Release button lock
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('loading-btn');
+        });
+    }
+
+    toggleMobileMenu(forceClose = false) {
+        const navMenu = document.querySelector('.nav-menu');
+        const menuToggle = document.getElementById('menuToggle');
+        if (!navMenu || !menuToggle) return;
+
+        if (forceClose || navMenu.classList.contains('active')) {
+            navMenu.classList.remove('active');
+            menuToggle.textContent = '☰';
+        } else {
+            navMenu.classList.add('active');
+            menuToggle.textContent = '✕';
+        }
+    }
+
+    showToast(message, type = 'success', duration = 6000) {
+        let container = document.getElementById('toastContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toastContainer';
+            container.className = 'toast-container';
+            document.body.appendChild(container);
+        }
+
+        const toast = document.createElement('div');
+        toast.className = `toast-card ${type}`;
+        
+        let icon = '';
+        if (type === 'success') {
+            icon = `<svg class="toast-svg" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`;
+        } else if (type === 'error') {
+            icon = `<svg class="toast-svg" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>`;
+        } else if (type === 'loading') {
+            icon = '<div class="form-status-spinner"></div>';
+        } else if (type === 'warning') {
+            icon = `<svg class="toast-svg" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>`;
+        }
+
+        toast.innerHTML = `
+            <div class="toast-content">
+                <span class="toast-icon">${icon}</span>
+                <span class="toast-message">${message}</span>
+            </div>
+            <button class="toast-close" aria-label="Close">
+                <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        `;
+
+        container.appendChild(toast);
+
+        const closeBtn = toast.querySelector('.toast-close');
+        const dismissToast = () => {
+            toast.style.animation = 'fadeOut var(--transition-fast) forwards';
+            setTimeout(() => {
+                toast.remove();
+            }, 300);
+        };
+
+        closeBtn.addEventListener('click', dismissToast);
+
+        if (duration) {
+            setTimeout(dismissToast, duration);
+        }
+
+        return toast;
     }
 
     setupProfileImage() {
@@ -287,51 +413,12 @@ class InteractiveEffects {
     }
 
     init() {
-        this.setupProjectButtons();
-        // this.setupScrollEffects(); // Disabled for horizontal scroll
         this.setupCardAnimations();
-    }
-
-    setupProjectButtons() {
-        const projectButtons = document.querySelectorAll('.project-card .btn-primary');
-        projectButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const projectTitle = button.closest('.project-card').querySelector('.project-title').textContent;
-                alert(`Project: ${projectTitle}\n\nThis is a placeholder. In a real portfolio, this would link to the project details or demo.`);
-            });
-        });
-    }
-
-    setupScrollEffects() {
-        // Add scroll-based animations for elements
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: '0px 0px -100px 0px'
-        };
-
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                    entry.target.style.transform = 'translateY(0)';
-                }
-            });
-        }, observerOptions);
-
-        // Observe cards and sections
-        const animatedElements = document.querySelectorAll('.service-card, .project-card, .skill-item');
-        animatedElements.forEach((el, index) => {
-            el.style.opacity = '0';
-            el.style.transform = 'translateY(30px)';
-            el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
-            observer.observe(el);
-        });
     }
 
     setupCardAnimations() {
         // Add ripple effect on card clicks
-        const cards = document.querySelectorAll('.link-card, .service-card, .project-card');
+        const cards = document.querySelectorAll('.link-card, .service-card.tile, .project-tile');
         cards.forEach(card => {
             card.addEventListener('click', function (e) {
                 const ripple = document.createElement('span');
@@ -486,7 +573,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Console welcome message
     console.log('%c👋 Welcome to Faizan Ali\'s Portfolio', 'font-size: 20px; color: #d4af37; font-weight: bold;');
     console.log('%cKeyboard shortcuts:', 'font-size: 14px; color: #b8b8b8;');
-    console.log('  1-5: Jump to sections\n  Esc: Return to home\n  Ctrl+↑/↓: Navigate sections');
+    console.log('  1-5: Jump to sections\n  Esc: Return to home\n  Arrows (↑ / ↓ / ← / →): Navigate sections');
 });
 
 // ========================================
